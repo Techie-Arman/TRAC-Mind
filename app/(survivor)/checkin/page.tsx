@@ -8,6 +8,7 @@ import { ChatMessage } from "@/lib/mock-data";
 import { useTranslation } from "@/lib/i18n";
 import { loadBuddySession, saveBuddySession } from "@/lib/buddy-session";
 import { getRecentMemoryContext, saveCheckInRecord } from "@/lib/buddy-memory";
+import { ChatMessageRenderer } from "@/components/ChatMessageRenderer";
 
 function mkId(prefix = "m") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -194,6 +195,7 @@ export default function CheckInPage() {
         role: "buddy",
         text: replyText,
         timestamp: new Date().toISOString(),
+        isCrisis: !!data.isCrisis,
       };
 
       const finalMessages = [...updatedWithUser, buddyReply];
@@ -214,6 +216,7 @@ export default function CheckInPage() {
         role: "buddy",
         text: fallbackText,
         timestamp: new Date().toISOString(),
+        isCrisis: false,
       };
 
       const finalMessages = [...updatedWithUser, fallbackReply];
@@ -305,7 +308,17 @@ export default function CheckInPage() {
               <div className={styles.avatarSmall} aria-hidden>💜</div>
             )}
             <div>
-              <div className={`chat-bubble ${msg.role}`}>{msg.text}</div>
+              <div
+                className={`chat-bubble ${msg.role} ${
+                  msg.isCrisis && msg.role === "buddy" ? styles.crisisBubble : ""
+                }`}
+              >
+                <ChatMessageRenderer
+                  text={msg.text}
+                  isCrisis={msg.isCrisis}
+                  role={msg.role}
+                />
+              </div>
               <div className={`text-xs text-faint ${styles.timestamp}`}>{formatTime(msg.timestamp)}</div>
             </div>
           </div>

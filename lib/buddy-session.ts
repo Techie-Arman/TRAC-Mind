@@ -6,6 +6,7 @@ export interface SharedChatMessage {
   role: "user" | "buddy";
   text: string;
   timestamp: string;
+  isCrisis?: boolean;
 }
 
 const STORAGE_KEY = "trac_buddy_shared_history";

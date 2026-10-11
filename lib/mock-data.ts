@@ -159,6 +159,7 @@ export interface ChatMessage {
   role: "user" | "buddy";
   text: string;
   timestamp: string;
+  isCrisis?: boolean;
 }
 
 export const INITIAL_CHAT: ChatMessage[] = [

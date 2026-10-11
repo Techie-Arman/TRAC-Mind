@@ -7,6 +7,7 @@ import styles from "./buddy-voice.module.css";
 import { useTranslation } from "@/lib/i18n";
 import { loadBuddySession, saveBuddySession } from "@/lib/buddy-session";
 import { getRecentMemoryContext, saveCheckInRecord } from "@/lib/buddy-memory";
+import { ChatMessageRenderer } from "@/components/ChatMessageRenderer";
 
 type VoiceState = "idle" | "listening" | "thinking" | "speaking" | "error";
 
@@ -14,6 +15,7 @@ interface ChatItem {
   id: string;
   role: "user" | "buddy";
   text: string;
+  isCrisis?: boolean;
 }
 
 interface SpeechRecognitionEvent {
@@ -81,7 +83,7 @@ export default function BuddyVoicePage() {
   useEffect(() => {
     const existing = loadBuddySession();
     if (existing.length > 0) {
-      setConversation(existing.map((m) => ({ id: m.id, role: m.role, text: m.text })));
+      setConversation(existing.map((m) => ({ id: m.id, role: m.role, text: m.text, isCrisis: m.isCrisis })));
     } else {
       const memoryContext = getRecentMemoryContext();
       let initialText = t.buddyInitialGreeting;
@@ -441,7 +443,12 @@ export default function BuddyVoicePage() {
       });
 
       // 4. Add Buddy response to conversation
-      const buddyMsg: ChatItem = { id: mkId(`b-t${currentTurn}`), role: "buddy", text: replyText };
+      const buddyMsg: ChatItem = {
+        id: mkId(`b-t${currentTurn}`),
+        role: "buddy",
+        text: replyText,
+        isCrisis: !!data.isCrisis,
+      };
       setConversation((prev) => {
         const updated = [...prev, buddyMsg];
         saveBuddySession(updated.map((m) => ({ ...m, timestamp: new Date().toISOString() })));
@@ -464,7 +471,12 @@ export default function BuddyVoicePage() {
           ? "मी तुमचे ऐकत आहे. तुम्ही येथे सुरक्षित आहात, दीर्घ श्वास घ्या."
           : "I hear you. Take a slow, gentle breath — I'm right here with you.";
 
-      const buddyMsg: ChatItem = { id: mkId(`b-fb-t${currentTurn}`), role: "buddy", text: fallbackReply };
+      const buddyMsg: ChatItem = {
+        id: mkId(`b-fb-t${currentTurn}`),
+        role: "buddy",
+        text: fallbackReply,
+        isCrisis: false,
+      };
       setConversation((prev) => {
         const updated = [...prev, buddyMsg];
         saveBuddySession(updated.map((m) => ({ ...m, timestamp: new Date().toISOString() })));
@@ -688,8 +700,16 @@ export default function BuddyVoicePage() {
             {msg.role === "buddy" && (
               <div className={styles.buddyAvatarSm} aria-hidden>💜</div>
             )}
-            <div className={`${styles.bubble} ${msg.role === "user" ? styles.userBubble : styles.buddyBubble}`}>
-              {msg.text}
+            <div
+              className={`${styles.bubble} ${
+                msg.role === "user" ? styles.userBubble : styles.buddyBubble
+              } ${msg.isCrisis && msg.role === "buddy" ? styles.crisisBubble : ""}`}
+            >
+              <ChatMessageRenderer
+                text={msg.text}
+                isCrisis={msg.isCrisis}
+                role={msg.role}
+              />
             </div>
             {msg.role === "user" && (
               <div className={styles.userAvatar} aria-hidden>🎙️</div>
