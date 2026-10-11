@@ -1,9 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { MOCK_CASES, Case } from "@/lib/mock-data";
+import { useState, useEffect, useMemo, Suspense } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import {
+  listCases,
+  getAvailableStates,
+  getDistrictsForState,
+  CanonicalCase,
+} from "@/lib/cases-data";
 import styles from "./dashboard.module.css";
+
+type ScopeLevel = "national" | "state" | "district";
 
 function formatSLA(iso: string) {
   const diff = new Date(iso).getTime() - Date.now();
@@ -16,20 +23,93 @@ function formatSLA(iso: string) {
 
 function formatChannel(ch: string) {
   const MAP: Record<string, string> = { pwa: "PWA", sms: "SMS", voice: "Voice", ivrs: "IVRS" };
-  return MAP[ch] ?? ch.toUpperCase();
+  const lower = ch.toLowerCase();
+  return MAP[lower] ?? ch.toUpperCase();
 }
 
 function formatTime(iso: string) {
   return new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const allCases = useMemo(() => listCases(), []);
+  const availableStates = useMemo(() => getAvailableStates(), []);
+  const defaultState = availableStates[0] || "";
+
+  // Initialize scope from URL parameters if available
+  const paramLevel = searchParams.get("level");
+  const initialLevel: ScopeLevel =
+    paramLevel === "state" || paramLevel === "district" ? paramLevel : "national";
+  const initialQueryState = searchParams.get("state") || "";
+  const initialQueryDistrict = searchParams.get("district") || "";
+
+  const [scopeLevel, setScopeLevel] = useState<ScopeLevel>(initialLevel);
+  const [selectedState, setSelectedState] = useState<string>(
+    initialQueryState && availableStates.includes(initialQueryState)
+      ? initialQueryState
+      : defaultState
+  );
+
+  const availableDistricts = useMemo(() => {
+    return selectedState ? getDistrictsForState(selectedState) : [];
+  }, [selectedState]);
+
+  const defaultDistrict = availableDistricts[0] || "";
+
+  const [selectedDistrict, setSelectedDistrict] = useState<string>(
+    initialQueryDistrict && availableDistricts.includes(initialQueryDistrict)
+      ? initialQueryDistrict
+      : defaultDistrict
+  );
+
+  // Keep district synchronized if selected state changes
+  useEffect(() => {
+    if (availableDistricts.length > 0 && !availableDistricts.includes(selectedDistrict)) {
+      setSelectedDistrict(availableDistricts[0]);
+    }
+  }, [selectedState, availableDistricts, selectedDistrict]);
+
+  // URL sync helper (updates address bar without page reload)
+  const updateUrlScope = (level: ScopeLevel, st: string, dt: string) => {
+    const params = new URLSearchParams();
+    if (level === "state") {
+      params.set("level", "state");
+      if (st) params.set("state", st);
+    } else if (level === "district") {
+      params.set("level", "district");
+      if (st) params.set("state", st);
+      if (dt) params.set("district", dt);
+    }
+    const query = params.toString();
+    const targetUrl = query ? `${pathname}?${query}` : pathname;
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", targetUrl);
+    }
+  };
+
   const [filterTier, setFilterTier] = useState<"all" | "high" | "medium" | "low">("all");
   const [filterStatus, setFilterStatus] = useState<"all" | "open" | "in_progress" | "resolved">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filtered = MOCK_CASES.filter((c) => {
+  // Recalculate cases according to active geographic scope
+  const scopedCases = useMemo(() => {
+    if (scopeLevel === "state") {
+      return allCases.filter((c) => c.state === selectedState);
+    }
+    if (scopeLevel === "district") {
+      return allCases.filter(
+        (c) => c.state === selectedState && c.district === selectedDistrict
+      );
+    }
+    return allCases;
+  }, [allCases, scopeLevel, selectedState, selectedDistrict]);
+
+  // Combined filters (tier, status, search) operating on top of geographic scope
+  const filtered = scopedCases.filter((c) => {
     if (filterTier !== "all" && c.tier !== filterTier) return false;
     if (filterStatus !== "all" && c.status !== filterStatus) return false;
     if (searchQuery.trim()) {
@@ -49,9 +129,17 @@ export default function DashboardPage() {
     return new Date(a.slaDueAt).getTime() - new Date(b.slaDueAt).getTime();
   });
 
-  const highCount   = MOCK_CASES.filter((c) => c.tier === "high").length;
-  const mediumCount = MOCK_CASES.filter((c) => c.tier === "medium").length;
-  const openCount   = MOCK_CASES.filter((c) => c.status === "open").length;
+  // Summary counts recalculated for active scope only
+  const highCount   = scopedCases.filter((c) => c.tier === "high").length;
+  const mediumCount = scopedCases.filter((c) => c.tier === "medium").length;
+  const openCount   = scopedCases.filter((c) => c.status === "open").length;
+  const totalCount  = scopedCases.length;
+
+  const scopeLabel = useMemo(() => {
+    if (scopeLevel === "national") return "Showing: National";
+    if (scopeLevel === "state") return `Showing: ${selectedState}`;
+    return `Showing: ${selectedDistrict}, ${selectedState}`;
+  }, [scopeLevel, selectedState, selectedDistrict]);
 
   return (
     <div className="animate-fade-in">
@@ -69,7 +157,70 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick stats row */}
+      {/* Scope Selector: National | State | District */}
+      <div className={styles.scopeBar}>
+        <div className={styles.filterChips} role="group" aria-label="Geographic scope selector">
+          {(["national", "state", "district"] as const).map((lvl) => (
+            <button
+              key={lvl}
+              className={`${styles.filterChip} ${scopeLevel === lvl ? styles.filterChipActive : ""}`}
+              onClick={() => {
+                setScopeLevel(lvl);
+                updateUrlScope(lvl, selectedState, selectedDistrict);
+              }}
+            >
+              {lvl.charAt(0).toUpperCase() + lvl.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* State dropdown */}
+        {(scopeLevel === "state" || scopeLevel === "district") && (
+          <select
+            className={`input ${styles.scopeSelect}`}
+            value={selectedState}
+            onChange={(e) => {
+              const nextState = e.target.value;
+              setSelectedState(nextState);
+              const nextDistricts = getDistrictsForState(nextState);
+              const nextDistrict = nextDistricts[0] || "";
+              setSelectedDistrict(nextDistrict);
+              updateUrlScope(scopeLevel, nextState, nextDistrict);
+            }}
+            aria-label="Select state filter"
+          >
+            {availableStates.map((st) => (
+              <option key={st} value={st}>
+                {st}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* District dropdown */}
+        {scopeLevel === "district" && (
+          <select
+            className={`input ${styles.scopeSelect}`}
+            value={selectedDistrict}
+            onChange={(e) => {
+              const nextDistrict = e.target.value;
+              setSelectedDistrict(nextDistrict);
+              updateUrlScope(scopeLevel, selectedState, nextDistrict);
+            }}
+            aria-label="Select district filter"
+          >
+            {availableDistricts.map((dt) => (
+              <option key={dt} value={dt}>
+                {dt}
+              </option>
+            ))}
+          </select>
+        )}
+
+        <span className={styles.scopeIndicator}>{scopeLabel}</span>
+      </div>
+
+      {/* Quick stats row (recalculated for current geographic scope) */}
       <div className={styles.statsRow}>
         <div className="stat-card" onClick={() => setFilterTier("high")} style={{ cursor: "pointer" }}>
           <span className="stat-value" style={{ color: "var(--risk-high)" }}>{highCount}</span>
@@ -84,7 +235,7 @@ export default function DashboardPage() {
           <span className="stat-label">Awaiting Triage</span>
         </div>
         <div className="stat-card" onClick={() => { setFilterTier("all"); setFilterStatus("all"); }} style={{ cursor: "pointer" }}>
-          <span className="stat-value">{MOCK_CASES.length}</span>
+          <span className="stat-value">{totalCount}</span>
           <span className="stat-label">Total Active</span>
         </div>
       </div>
@@ -282,5 +433,13 @@ export default function DashboardPage() {
         </table>
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="animate-fade-in" />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

@@ -1,0 +1,121 @@
+pseudo_id,risk_tier,ddi_score,channel,language,sla_deadline,counselor,last_activity,status,state,district,created_at,case_id
+ANON-4821,High,82,PWA,Hindi,2026-10-11T10:12,Dr. Priya Nair,2026-10-11T09:53,Open,Uttar Pradesh,Aligarh,2026-10-11T04:53,case-001
+ANON-8384,High,97,Voice,Kannada,2026-10-11T10:22,Unassigned,2026-10-09T00:49,Open,Karnataka,Bengaluru Urban,2026-10-08T21:09,case-002
+ANON-8141,High,92,PWA,English,2026-10-08T17:36,Dr. Debashis Roy,2026-10-08T17:30,Resolved,West Bengal,Kolkata,2026-10-08T16:35,case-003
+ANON-7144,High,92,Voice,Marathi,2026-10-08T08:08,Rahul Mehta,2026-10-08T15:13,Resolved,Maharashtra,Pune,2026-10-08T07:05,case-004
+ANON-8428,High,88,Voice,Tamil,2026-10-11T11:40,Dr. Meenakshi Iyer,2026-10-07T06:59,In Progress,Tamil Nadu,Madurai,2026-10-07T00:03,case-005
+ANON-4567,High,83,SMS,English,2026-10-11T10:43,Dr. Priya Nair,2026-10-04T00:31,In Progress,Uttar Pradesh,Varanasi,2026-10-03T22:33,case-006
+ANON-1647,High,77,SMS,Hindi,2026-10-11T10:43,Rahul Mehta,2026-10-04T03:49,Open,Uttar Pradesh,Agra,2026-10-04T01:03,case-007
+ANON-3041,High,76,PWA,Hindi,2026-10-11T10:15,Dr. Imran Qureshi,2026-09-30T14:16,In Progress,Uttar Pradesh,Lucknow,2026-09-30T08:25,case-008
+ANON-5394,High,76,SMS,Hindi,2026-10-11T10:43,Unassigned,2026-09-29T09:27,Open,Delhi,New Delhi,2026-09-29T03:24,case-009
+ANON-1611,High,76,Voice,Hindi,2026-10-11T10:22,Dr. Debashis Roy,2026-09-30T21:50,In Progress,West Bengal,Kolkata,2026-09-30T12:53,case-010
+ANON-1404,High,76,IVRS,Hindi,2026-10-11T11:40,Dr. Nikhil Sinha,2026-09-27T22:33,In Progress,Bihar,Patna,2026-09-27T22:01,case-011
+ANON-9912,High,74,IVRS,Hindi,2026-10-11T10:29,Unassigned,2026-10-11T10:00,Open,Uttar Pradesh,Lucknow,2026-10-10T21:00,case-012
+ANON-7605,High,74,Voice,Hindi,2026-10-11T10:58,Unassigned,2026-09-28T09:16,Open,Rajasthan,Udaipur,2026-09-28T03:05,case-013
+ANON-6235,High,73,Voice,Bengali,2026-10-08T15:05,Dr. Debashis Roy,2026-10-08T18:42,Resolved,West Bengal,Howrah,2026-10-08T13:59,case-014
+ANON-3702,High,73,PWA,Bengali,2026-10-11T11:40,Dr. Soma Banerjee,2026-10-09T19:06,In Progress,West Bengal,Kolkata,2026-10-09T09:55,case-015
+ANON-2165,High,71,SMS,English,2026-10-11T10:12,Unassigned,2026-09-29T10:00,Open,Rajasthan,Jaipur,2026-09-29T05:37,case-016
+ANON-5131,High,70,PWA,English,2026-10-11T10:58,Dr. Priya Nair,2026-10-11T08:31,Open,Rajasthan,Udaipur,2026-10-11T03:56,case-017
+ANON-6687,High,70,PWA,Hindi,2026-10-11T11:40,Rahul Mehta,2026-10-07T16:58,In Progress,Uttar Pradesh,Agra,2026-10-07T08:36,case-018
+ANON-8193,Medium,69,PWA,English,2026-10-11T14:39,Unassigned,2026-10-08T02:43,Open,Uttar Pradesh,Kanpur,2026-10-07T21:58,case-019
+ANON-4181,Medium,69,Voice,Tamil,2026-10-01T14:55,Dr. Karthik S.,2026-10-01T15:32,Resolved,Tamil Nadu,Coimbatore,2026-10-01T08:48,case-020
+ANON-6619,Medium,68,PWA,Bengali,2026-10-07T19:01,Dr. Soma Banerjee,2026-10-07T15:23,Resolved,West Bengal,Darjeeling,2026-10-07T12:49,case-021
+ANON-4819,Medium,68,IVRS,Hindi,2026-10-11T16:21,Dr. Kavya Rao,2026-10-06T13:55,In Progress,Karnataka,Mangaluru,2026-10-06T10:41,case-022
+ANON-9462,Medium,68,PWA,Marathi,2026-10-11T14:20,Unassigned,2026-09-28T05:37,Open,Maharashtra,Nashik,2026-09-28T00:24,case-023
+ANON-3885,Medium,68,PWA,Hindi,2026-10-04T18:13,Dr. Anjali Verma,2026-10-04T20:07,Resolved,Delhi,New Delhi,2026-10-04T12:08,case-024
+ANON-7005,Medium,66,PWA,Hindi,2026-10-11T11:13,Unassigned,2026-10-03T22:20,Open,Bihar,Gaya,2026-10-03T17:26,case-025
+ANON-1914,Medium,64,PWA,Hindi,2026-10-04T12:47,Dr. Arjun Hegde,2026-10-04T16:19,In Progress,Karnataka,Mangaluru,2026-10-04T06:46,case-026
+ANON-7120,Medium,62,IVRS,Hindi,2026-10-11T15:05,Dr. Imran Qureshi,2026-10-05T13:41,In Progress,Uttar Pradesh,Lucknow,2026-10-05T12:09,case-027
+ANON-6089,Medium,62,PWA,Hindi,2026-10-11T11:18,Dr. Priya Nair,2026-10-04T05:28,Open,Rajasthan,Jodhpur,2026-10-04T05:13,case-028
+ANON-8779,Medium,62,PWA,English,2026-10-11T12:24,Unassigned,2026-10-02T06:59,Open,Rajasthan,Jodhpur,2026-10-02T00:06,case-029
+ANON-1921,Medium,62,IVRS,Hindi,2026-10-08T22:02,Dr. Priya Nair,2026-10-08T19:56,Resolved,Rajasthan,Jaipur,2026-10-08T15:57,case-030
+ANON-7504,Medium,61,PWA,Hindi,2026-10-11T15:16,Dr. Nikhil Sinha,2026-09-30T00:38,In Progress,Bihar,Muzaffarpur,2026-09-29T18:00,case-031
+ANON-5328,Medium,61,SMS,Hindi,2026-10-06T05:07,Dr. Priya Nair,2026-10-06T00:06,Resolved,Delhi,South Delhi,2026-10-05T22:48,case-032
+ANON-6824,Medium,60,PWA,Bengali,2026-10-04T16:53,Dr. Soma Banerjee,2026-10-04T17:38,Resolved,West Bengal,Kolkata,2026-10-04T10:46,case-033
+ANON-8971,Medium,60,Voice,Marathi,2026-09-30T09:21,Rahul Mehta,2026-09-30T07:20,Resolved,Maharashtra,Mumbai,2026-09-30T03:10,case-034
+ANON-6584,Medium,60,SMS,Hindi,2026-10-07T22:01,Unassigned,2026-10-07T17:47,Open,Maharashtra,Pune,2026-10-07T15:53,case-035
+ANON-3851,Medium,60,PWA,Tamil,2026-10-08T14:35,Dr. Karthik S.,2026-10-08T16:24,Resolved,Tamil Nadu,Madurai,2026-10-08T08:32,case-036
+ANON-7519,Medium,60,IVRS,Hindi,2026-10-09T16:06,Dr. Pooja Rathore,2026-10-09T16:55,Resolved,Rajasthan,Jodhpur,2026-10-09T09:49,case-037
+ANON-8693,Medium,59,PWA,English,2026-10-11T12:16,Unassigned,2026-10-02T20:46,Open,Tamil Nadu,Coimbatore,2026-10-02T15:16,case-038
+ANON-2891,Medium,59,Voice,English,2026-10-09T23:44,Dr. Priya Nair,2026-10-09T20:52,In Progress,Uttar Pradesh,Agra,2026-10-09T17:41,case-039
+ANON-7743,Medium,58,SMS,Marathi,2026-10-11T12:34,Rahul Mehta,2026-10-11T09:20,In Progress,Maharashtra,Pune,2026-10-10T18:20,case-040
+ANON-9791,Medium,58,PWA,Marathi,2026-10-09T16:24,Dr. Sneha Kulkarni,2026-10-09T10:34,Resolved,Maharashtra,Pune,2026-10-09T10:08,case-041
+ANON-3262,Medium,57,IVRS,Hindi,2026-10-11T15:07,Dr. Pooja Rathore,2026-09-28T11:37,Open,Rajasthan,Udaipur,2026-09-28T07:42,case-042
+ANON-8425,Medium,56,SMS,Hindi,2026-10-11T14:03,Dr. Priya Nair,2026-09-30T09:47,In Progress,Uttar Pradesh,Aligarh,2026-09-30T08:25,case-043
+ANON-1254,Medium,56,Voice,Bengali,2026-09-30T14:52,Dr. Soma Banerjee,2026-09-30T16:21,Resolved,West Bengal,Howrah,2026-09-30T08:45,case-044
+ANON-8237,Medium,55,PWA,Hindi,2026-10-11T15:42,Dr. Debashis Roy,2026-10-05T02:18,In Progress,West Bengal,Howrah,2026-10-04T19:13,case-045
+ANON-1681,Medium,53,SMS,Kannada,2026-09-29T04:49,Dr. Arjun Hegde,2026-09-29T03:09,Resolved,Karnataka,Bengaluru Urban,2026-09-28T22:40,case-046
+ANON-9170,Medium,53,Voice,Bengali,2026-10-11T16:10,Dr. Debashis Roy,2026-10-08T10:11,In Progress,West Bengal,Kolkata,2026-10-08T08:42,case-047
+ANON-3408,Medium,53,SMS,Marathi,2026-10-11T11:16,Rahul Mehta,2026-10-11T10:10,In Progress,Maharashtra,Pune,2026-10-11T05:08,case-048
+ANON-8025,Medium,52,PWA,Marathi,2026-10-04T07:46,Dr. Sneha Kulkarni,2026-10-04T05:57,Resolved,Maharashtra,Pune,2026-10-04T01:30,case-049
+ANON-1090,Medium,52,Voice,Hindi,2026-10-04T20:20,Dr. Priya Nair,2026-10-05T00:03,Resolved,Delhi,North Delhi,2026-10-04T14:09,case-050
+ANON-2144,Medium,52,SMS,English,2026-10-09T08:40,Dr. Meenakshi Iyer,2026-10-09T04:33,In Progress,Tamil Nadu,Madurai,2026-10-09T02:35,case-051
+ANON-4532,Medium,51,IVRS,English,2026-10-02T11:15,Dr. Priya Nair,2026-10-02T10:21,Resolved,Uttar Pradesh,Aligarh,2026-10-02T04:56,case-052
+ANON-5351,Medium,51,SMS,Hindi,2026-09-28T09:15,Rahul Mehta,2026-09-28T08:31,In Progress,Maharashtra,Mumbai,2026-09-28T02:56,case-053
+ANON-7006,Medium,51,SMS,English,2026-10-07T22:15,Rahul Mehta,2026-10-07T23:41,Resolved,Uttar Pradesh,Lucknow,2026-10-07T15:56,case-054
+ANON-9062,Medium,50,IVRS,Bengali,2026-10-11T13:08,Unassigned,2026-09-28T09:14,Open,West Bengal,Howrah,2026-09-28T03:07,case-055
+ANON-6552,Medium,49,IVRS,English,2026-10-01T23:15,Dr. Pooja Rathore,2026-10-02T02:19,In Progress,Rajasthan,Jodhpur,2026-10-01T17:02,case-056
+ANON-5392,Medium,48,PWA,Kannada,2026-10-08T03:07,Dr. Kavya Rao,2026-10-08T04:18,Resolved,Karnataka,Mangaluru,2026-10-07T20:59,case-057
+ANON-1887,Medium,47,SMS,Hindi,2026-10-11T15:37,Unassigned,2026-10-05T13:00,Open,Bihar,Muzaffarpur,2026-10-05T04:14,case-058
+ANON-3768,Medium,47,IVRS,Hindi,2026-10-07T04:25,Dr. Priya Nair,2026-10-06T23:11,Resolved,Delhi,New Delhi,2026-10-06T22:17,case-059
+ANON-3459,Medium,46,IVRS,English,2026-10-10T12:12,Dr. Sneha Kulkarni,2026-10-10T08:20,Resolved,Maharashtra,Pune,2026-10-10T05:59,case-060
+ANON-6468,Medium,46,PWA,English,2026-10-05T16:58,Dr. Priya Nair,2026-10-05T17:25,Resolved,Rajasthan,Jaipur,2026-10-05T10:57,case-061
+ANON-5460,Medium,45,PWA,English,2026-10-04T04:50,Dr. Soma Banerjee,2026-10-04T01:40,Resolved,West Bengal,Kolkata,2026-10-03T22:33,case-062
+ANON-5381,Medium,45,PWA,Hindi,2026-09-30T12:37,Dr. Imran Qureshi,2026-09-30T09:34,Resolved,Uttar Pradesh,Lucknow,2026-09-30T06:36,case-063
+ANON-2138,Medium,44,IVRS,Hindi,2026-10-04T20:24,Dr. Priya Nair,2026-10-04T21:31,Resolved,Rajasthan,Jaipur,2026-10-04T14:21,case-064
+ANON-7596,Medium,43,IVRS,Hindi,2026-10-05T00:12,Dr. Nikhil Sinha,2026-10-05T02:34,Resolved,Bihar,Gaya,2026-10-04T18:12,case-065
+ANON-3013,Medium,43,PWA,Hindi,2026-10-05T09:39,Rahul Mehta,2026-10-05T03:47,Resolved,Bihar,Muzaffarpur,2026-10-05T03:28,case-066
+ANON-3558,Medium,43,PWA,Marathi,2026-10-10T01:22,Rahul Mehta,2026-10-10T03:14,Open,Maharashtra,Nashik,2026-10-09T19:16,case-067
+ANON-8271,Medium,42,SMS,Hindi,2026-10-11T13:26,Dr. Kavya Rao,2026-10-01T09:15,In Progress,Karnataka,Mysuru,2026-10-01T07:09,case-068
+ANON-7262,Medium,42,IVRS,English,2026-10-09T23:57,Rahul Mehta,2026-10-09T23:16,Resolved,Uttar Pradesh,Aligarh,2026-10-09T17:40,case-069
+ANON-8737,Medium,42,IVRS,English,2026-10-11T10:46,Dr. Debashis Roy,2026-09-27T21:04,Open,West Bengal,Kolkata,2026-09-27T15:10,case-070
+ANON-5737,Medium,42,PWA,Bengali,2026-10-11T13:12,Dr. Soma Banerjee,2026-10-08T08:41,In Progress,West Bengal,Howrah,2026-10-08T03:39,case-071
+ANON-5994,Medium,42,PWA,English,2026-10-09T14:03,Dr. Nikhil Sinha,2026-10-09T11:52,Resolved,Bihar,Patna,2026-10-09T08:02,case-072
+ANON-2736,Medium,41,SMS,Tamil,2026-10-06T16:09,Dr. Karthik S.,2026-10-06T14:51,Resolved,Tamil Nadu,Madurai,2026-10-06T09:57,case-073
+ANON-5100,Medium,41,SMS,English,2026-10-11T14:12,Unassigned,2026-10-10T14:38,Open,Bihar,Muzaffarpur,2026-10-10T08:26,case-074
+ANON-2438,Medium,40,IVRS,English,2026-10-02T09:38,Dr. Nikhil Sinha,2026-10-02T03:50,Resolved,Bihar,Muzaffarpur,2026-10-02T03:27,case-075
+ANON-8221,Low,38,Voice,English,2026-10-11T23:25,Dr. Nikhil Sinha,2026-10-09T05:57,In Progress,Bihar,Patna,2026-10-08T23:22,case-076
+ANON-4762,Low,38,PWA,Tamil,2026-10-04T12:56,Dr. Karthik S.,2026-10-01T20:34,Resolved,Tamil Nadu,Chennai,2026-10-01T12:43,case-077
+ANON-6112,Low,37,PWA,English,2026-10-12T20:13,Dr. Priya Nair,2026-10-09T21:29,Resolved,Delhi,New Delhi,2026-10-09T19:58,case-078
+ANON-3589,Low,37,PWA,Tamil,2026-10-11T18:35,Dr. Meenakshi Iyer,2026-10-08T19:46,Resolved,Tamil Nadu,Madurai,2026-10-08T18:24,case-079
+ANON-7359,Low,36,SMS,Hindi,2026-10-07T09:12,Unassigned,2026-10-04T18:43,Open,Delhi,New Delhi,2026-10-04T09:05,case-080
+ANON-7811,Low,35,PWA,Hindi,2026-10-06T12:49,Rahul Mehta,2026-10-03T18:50,In Progress,Bihar,Patna,2026-10-03T12:29,case-081
+ANON-6954,Low,35,IVRS,Hindi,2026-10-03T18:21,Dr. Kavya Rao,2026-10-01T02:02,Resolved,Karnataka,Bengaluru Urban,2026-09-30T18:05,case-082
+ANON-3767,Low,33,IVRS,Hindi,2026-10-05T07:39,Dr. Anjali Verma,2026-10-02T12:06,Resolved,Delhi,South Delhi,2026-10-02T07:19,case-083
+ANON-4700,Low,32,PWA,Hindi,2026-10-07T00:00,Unassigned,2026-10-04T09:42,Open,West Bengal,Kolkata,2026-10-03T23:50,case-084
+ANON-3301,Low,31,Voice,English,2026-10-13T10:04,Dr. Priya Nair,2026-10-11T07:05,In Progress,Delhi,New Delhi,2026-10-10T15:05,case-085
+ANON-9072,Low,31,IVRS,Hindi,2026-10-11T14:15,Dr. Kavya Rao,2026-10-08T15:32,Resolved,Karnataka,Bengaluru Urban,2026-10-08T14:05,case-086
+ANON-9959,Low,30,IVRS,Kannada,2026-10-01T20:54,Dr. Kavya Rao,2026-09-28T22:13,Resolved,Karnataka,Mysuru,2026-09-28T20:43,case-087
+ANON-8440,Low,29,SMS,English,2026-10-09T03:22,Rahul Mehta,2026-10-06T03:27,Resolved,Maharashtra,Pune,2026-10-06T03:20,case-088
+ANON-8182,Low,29,IVRS,Marathi,2026-10-06T23:11,Rahul Mehta,2026-10-04T00:21,In Progress,Maharashtra,Nagpur,2026-10-03T22:53,case-089
+ANON-3209,Low,28,PWA,Hindi,2026-10-02T14:34,Dr. Nikhil Sinha,2026-09-29T21:13,In Progress,Bihar,Muzaffarpur,2026-09-29T14:25,case-090
+ANON-2967,Low,25,IVRS,English,2026-10-13T09:34,Dr. Anjali Verma,2026-10-10T16:06,Resolved,Delhi,North Delhi,2026-10-10T09:33,case-091
+ANON-4041,Low,25,IVRS,English,2026-10-10T09:56,Unassigned,2026-10-07T16:24,Open,Uttar Pradesh,Lucknow,2026-10-07T09:44,case-092
+ANON-8270,Low,25,IVRS,Tamil,2026-10-06T15:42,Dr. Meenakshi Iyer,2026-10-03T17:24,In Progress,Tamil Nadu,Madurai,2026-10-03T15:40,case-093
+ANON-7905,Low,25,Voice,Kannada,2026-10-03T02:19,Unassigned,2026-09-30T05:46,Open,Karnataka,Mangaluru,2026-09-30T02:08,case-094
+ANON-4444,Low,25,PWA,Hindi,2026-10-12T05:04,Dr. Priya Nair,2026-10-09T11:54,Resolved,Delhi,South Delhi,2026-10-09T04:48,case-095
+ANON-1036,Low,24,Voice,Hindi,2026-10-02T09:46,Unassigned,2026-09-29T14:24,Open,Uttar Pradesh,Aligarh,2026-09-29T09:42,case-096
+ANON-2292,Low,24,PWA,Kannada,2026-10-11T15:33,Dr. Arjun Hegde,2026-10-08T16:59,Resolved,Karnataka,Mysuru,2026-10-08T15:17,case-097
+ANON-1947,Low,23,IVRS,Bengali,2026-10-12T09:42,Dr. Soma Banerjee,2026-10-09T11:36,In Progress,West Bengal,Kolkata,2026-10-09T09:37,case-098
+ANON-2267,Low,22,PWA,English,2026-10-14T10:04,Rahul Mehta,2026-10-11T10:05,Resolved,Maharashtra,Mumbai,2026-10-10T23:05,case-099
+ANON-5062,Low,21,SMS,Hindi,2026-10-14T06:03,Dr. Priya Nair,2026-10-11T10:10,In Progress,Uttar Pradesh,Agra,2026-10-11T05:52,case-100
+ANON-1546,Low,21,Voice,English,2026-10-04T06:25,Dr. Anjali Verma,2026-10-01T11:06,In Progress,Delhi,New Delhi,2026-10-01T06:06,case-101
+ANON-3932,Low,20,PWA,Hindi,2026-10-13T14:58,Dr. Soma Banerjee,2026-10-10T19:38,In Progress,West Bengal,Kolkata,2026-10-10T14:49,case-102
+ANON-8799,Low,19,PWA,Hindi,2026-10-08T17:43,Dr. Priya Nair,2026-10-05T19:54,In Progress,Delhi,South Delhi,2026-10-05T17:33,case-103
+ANON-5881,Low,18,Voice,Tamil,2026-09-30T20:00,Dr. Meenakshi Iyer,2026-09-28T04:38,Resolved,Tamil Nadu,Madurai,2026-09-27T19:50,case-104
+ANON-2822,Low,17,Voice,Hindi,2026-10-12T07:16,Rahul Mehta,2026-10-09T12:11,In Progress,Bihar,Muzaffarpur,2026-10-09T06:59,case-105
+ANON-1518,Low,17,PWA,Hindi,2026-10-08T21:02,Dr. Priya Nair,2026-10-06T05:40,Resolved,Rajasthan,Jaipur,2026-10-05T20:44,case-106
+ANON-1454,Low,16,IVRS,Hindi,2026-10-13T17:22,Dr. Pooja Rathore,2026-10-10T22:40,Resolved,Rajasthan,Jaipur,2026-10-10T17:16,case-107
+ANON-8602,Low,16,IVRS,Tamil,2026-10-09T18:08,Dr. Karthik S.,2026-10-07T02:13,Resolved,Tamil Nadu,Coimbatore,2026-10-06T17:51,case-108
+ANON-3737,Low,16,PWA,Hindi,2026-10-14T01:56,Dr. Priya Nair,2026-10-11T04:19,Resolved,Rajasthan,Jaipur,2026-10-11T01:45,case-109
+ANON-7621,Low,16,PWA,Hindi,2026-10-09T06:21,Dr. Arjun Hegde,2026-10-06T08:25,In Progress,Karnataka,Mysuru,2026-10-06T06:20,case-110
+ANON-5940,Low,13,PWA,English,2026-10-11T09:45,Dr. Imran Qureshi,2026-10-08T12:51,Resolved,Uttar Pradesh,Kanpur,2026-10-08T09:26,case-111
+ANON-8947,Low,10,Voice,English,2026-10-03T09:22,Dr. Sneha Kulkarni,2026-09-30T13:33,Resolved,Maharashtra,Nashik,2026-09-30T09:02,case-112
+ANON-9422,Low,9,Voice,Hindi,2026-10-10T07:46,Rahul Mehta,2026-10-07T17:13,In Progress,Maharashtra,Nagpur,2026-10-07T07:45,case-113
+ANON-7854,Low,8,PWA,Marathi,2026-10-07T19:51,Rahul Mehta,2026-10-04T21:59,Resolved,Maharashtra,Mumbai,2026-10-04T19:48,case-114
+ANON-3925,Low,8,PWA,Hindi,2026-10-13T09:26,Dr. Anjali Verma,2026-10-10T13:23,In Progress,Delhi,North Delhi,2026-10-10T09:12,case-115
+ANON-9949,Low,8,SMS,English,2026-10-03T07:16,Dr. Anjali Verma,2026-09-30T08:01,Resolved,Delhi,South Delhi,2026-09-30T06:59,case-116
+ANON-6194,Low,8,PWA,Marathi,2026-10-07T04:10,Rahul Mehta,2026-10-04T10:33,Resolved,Maharashtra,Nagpur,2026-10-04T03:50,case-117
+ANON-8231,Low,8,PWA,Hindi,2026-10-09T00:36,Dr. Priya Nair,2026-10-06T01:48,Open,Delhi,New Delhi,2026-10-06T00:17,case-118
+ANON-5472,Low,8,IVRS,Marathi,2026-10-01T03:07,Dr. Sneha Kulkarni,2026-09-28T03:18,Resolved,Maharashtra,Pune,2026-09-28T03:02,case-119
+ANON-9085,Low,8,IVRS,Hindi,2026-10-04T06:13,Dr. Sneha Kulkarni,2026-10-01T09:15,Resolved,Maharashtra,Nashik,2026-10-01T06:12,case-120
