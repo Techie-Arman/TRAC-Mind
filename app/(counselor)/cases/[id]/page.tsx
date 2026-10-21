@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
-import { MOCK_CASES } from "@/lib/mock-data";
+import { getCaseById, appendCaseNote, CanonicalCase, CaseNote } from "@/lib/cases-data";
 import styles from "./case.module.css";
 import Link from "next/link";
 
@@ -35,7 +35,8 @@ function DDIChart({ data }: { data: { day: string; ddi: number }[] }) {
   const W = 480, H = 140, PAD = { t: 10, r: 10, b: 30, l: 35 };
   const innerW = W - PAD.l - PAD.r;
   const innerH = H - PAD.t - PAD.b;
-  const xStep  = innerW / (data.length - 1);
+  const pointsCount = Math.max(data.length, 2);
+  const xStep  = innerW / (pointsCount - 1);
   function x(i: number) { return PAD.l + i * xStep; }
   function y(v: number) { return PAD.t + innerH - (v / 100) * innerH; }
   const pts  = data.map((d, i) => `${x(i)},${y(d.ddi)}`).join(" L ");
@@ -63,16 +64,18 @@ function DDIChart({ data }: { data: { day: string; ddi: number }[] }) {
       {labelIdx.map(i=>(
         <text key={i} x={x(i)} y={H-4} textAnchor="middle" fontSize="9" fill="var(--ink-faint)">{data[i].day}</text>
       ))}
-      <circle cx={x(data.length-1)} cy={y(data[data.length-1].ddi)} r="4"
-        fill="var(--brand)" stroke="#fff" strokeWidth="2" />
+      {data.length > 0 && (
+        <circle cx={x(data.length-1)} cy={y(data[data.length-1].ddi)} r="4"
+          fill="var(--brand)" stroke="#fff" strokeWidth="2" />
+      )}
     </svg>
   );
 }
 
-function Biomarkers({ b }: { b: NonNullable<(typeof MOCK_CASES)[0]["biomarkers"]> }) {
+function Biomarkers({ b }: { b: NonNullable<CanonicalCase["detail"]["biomarkers"]> }) {
   const items = [
-    { label: "Pitch variance",      value: b.pitchVariance,      max: 8,   unit: "Hz" },
-    { label: "Hesitation latency",  value: b.hesitationLatency,  max: 4,   unit: "s"  },
+    { label: "Pitch variance",      value: b.pitch_variance_hz,      max: 8,   unit: "Hz" },
+    { label: "Hesitation latency",  value: b.hesitation_latency_s,  max: 4,   unit: "s"  },
     { label: "Shimmer",             value: b.shimmer,            max: 0.6, unit: ""   },
     { label: "Jitter",              value: b.jitter,             max: 0.2, unit: ""   },
   ];
@@ -96,26 +99,52 @@ function Biomarkers({ b }: { b: NonNullable<(typeof MOCK_CASES)[0]["biomarkers"]
   );
 }
 
+function formatDuration(sec: number) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+}
+
+function formatTime(iso: string) {
+  try {
+    return new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return iso;
+  }
+}
+
 export default function CaseDetailPage() {
-  const params  = useParams();
-  const router  = useRouter();
-  const caseData = MOCK_CASES.find((c) => c.id === params.id);
+  const params = useParams();
+  const router = useRouter();
+  const paramId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const caseData = getCaseById(paramId as string);
 
   // Audio player state
   const [isPlaying, setIsPlaying] = useState(false);
   const [playProgress, setPlayProgress] = useState(35); // percentage
-  const [speed, setSpeed] = useState<"1x" | "1.25x" | "1.5x">("1x");
+  const [speed, setSpeed] = useState<"1x" | "1.25x" | "1.5x">(
+    (caseData?.detail?.recording?.playback_speed as any) || "1x"
+  );
 
-  // Counselor notes
+  // Counselor notes state
   const [noteText, setNoteText] = useState("");
-  const [savedNotes, setSavedNotes] = useState<string[]>([
-    "Initial triage completed: survivor reported persistent sleep disturbance and apprehension following court summons.",
-  ]);
+  const [savedNotes, setSavedNotes] = useState<CaseNote[]>(
+    caseData?.detail?.case_notes || []
+  );
   const [noteSavedAlert, setNoteSavedAlert] = useState(false);
 
   function handleSaveNote() {
-    if (!noteText.trim()) return;
-    setSavedNotes((prev) => [noteText.trim(), ...prev]);
+    if (!noteText.trim() || !caseData) return;
+    const authorName =
+      caseData.counselor && caseData.counselor !== "Unassigned"
+        ? caseData.counselor
+        : "Dr. Priya Nair";
+    const updated = appendCaseNote(caseData.case_id, {
+      author: authorName,
+      text: noteText.trim(),
+      timestamp: new Date().toISOString(),
+    });
+    setSavedNotes(updated);
     setNoteText("");
     setNoteSavedAlert(true);
     setTimeout(() => setNoteSavedAlert(false), 3000);
@@ -141,13 +170,13 @@ export default function CaseDetailPage() {
             ← Back to Dashboard
           </button>
           <h1 className="text-h1" style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)", flexWrap: "wrap" }}>
-            Case {caseData.pseudoId}
+            Case {caseData.pseudo_id}
             <span className={`risk-badge ${caseData.tier}`}>
-              {caseData.tier.toUpperCase()} RISK
+              {caseData.risk_tier.toUpperCase()} RISK
             </span>
           </h1>
           <div className="text-sm text-muted" style={{ marginTop: "var(--sp-1)" }}>
-            Channel: <strong>{caseData.channel.toUpperCase()}</strong> · Language: <strong>{caseData.language}</strong> · Assigned: <strong>{caseData.assignedCounselor}</strong>
+            Channel: <strong>{caseData.channel.toUpperCase()}</strong> · Language: <strong>{caseData.language}</strong> · Assigned: <strong>{caseData.counselor}</strong>
           </div>
         </div>
 
@@ -163,8 +192,8 @@ export default function CaseDetailPage() {
       <div className={styles.grid}>
         {/* Left Column: Audio Recording + Transcript + Notes */}
         <div className={styles.leftCol}>
-          {/* Audio Playback Widget */}
-          {caseData.channel === "voice" || caseData.biomarkers ? (
+          {/* Audio Playback Widget - hidden for SMS cases where recording is null */}
+          {caseData.detail.recording ? (
             <div className="card-elevated">
               <div className={styles.audioCardHead}>
                 <div>
@@ -207,7 +236,9 @@ export default function CaseDetailPage() {
                   })}
                 </div>
 
-                <span className={styles.audioTime}>01:24</span>
+                <span className={styles.audioTime}>
+                  {formatDuration(caseData.detail.recording.duration_seconds)}
+                </span>
               </div>
             </div>
           ) : null}
@@ -216,7 +247,7 @@ export default function CaseDetailPage() {
           <div className="card-elevated">
             <h2 className={`text-h2 ${styles.sectionTitle}`}>Sanitized Check-In Transcript</h2>
             <div className={styles.transcript}>
-              {caseData.sanitizedTranscript.map((line, i) => (
+              {caseData.detail.transcript.lines.map((line, i) => (
                 <div key={i} className={styles.transcriptLine}>
                   <span className={styles.transcriptNum}>{i + 1}</span>
                   <span>{line}</span>
@@ -224,7 +255,7 @@ export default function CaseDetailPage() {
               ))}
             </div>
             <div className={styles.piiNote}>
-              🔒 <strong>DPDP Act Compliance:</strong> Personally identifiable data (names, locations, phone numbers) has been de-identified at intake. Raw audio is purged post-feature extraction.
+              🔒 <strong>DPDP Act Compliance:</strong> {caseData.detail.transcript.compliance || "Personally identifiable data (names, locations, phone numbers) has been de-identified at intake. Raw audio is purged post-feature extraction."}
             </div>
           </div>
 
@@ -263,7 +294,14 @@ export default function CaseDetailPage() {
                   {savedNotes.map((n, i) => (
                     <div key={i} className={styles.noteItem}>
                       <span className={styles.noteDot}>•</span>
-                      <p className="text-sm text-ink">{n}</p>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: 1 }}>
+                        <div className="text-xs text-muted" style={{ display: "flex", gap: "var(--sp-2)", alignItems: "center" }}>
+                          <strong>{n.author}</strong>
+                          <span>·</span>
+                          <span>{formatTime(n.timestamp)}</span>
+                        </div>
+                        <p className="text-sm text-ink">{n.text}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -271,11 +309,11 @@ export default function CaseDetailPage() {
             </div>
           </div>
 
-          {/* Biomarkers */}
-          {caseData.biomarkers && (
+          {/* Biomarkers - hidden for SMS cases where biomarkers is null */}
+          {caseData.detail.biomarkers && (
             <div className="card-elevated">
               <h2 className={`text-h2 ${styles.sectionTitle}`}>Acoustic Vocal Biomarkers</h2>
-              <Biomarkers b={caseData.biomarkers} />
+              <Biomarkers b={caseData.detail.biomarkers} />
             </div>
           )}
         </div>
@@ -286,21 +324,21 @@ export default function CaseDetailPage() {
           <div className="card-elevated">
             <h2 className={`text-h2 ${styles.sectionTitle}`}>Dynamic Distress Index (DDI)</h2>
             <div className={styles.ddiRow}>
-              <DDIDonut value={caseData.ddi} tier={caseData.tier} />
+              <DDIDonut value={caseData.detail.ddi.score} tier={caseData.detail.ddi.risk_tier.toLowerCase()} />
               <div className={styles.ddiMeta}>
                 <div className={styles.ddiMetaItem}>
                   <span className="text-xs text-muted">Risk Tier</span>
-                  <span className={`risk-badge ${caseData.tier}`}>
-                    {caseData.tier.toUpperCase()}
+                  <span className={`risk-badge ${caseData.detail.ddi.risk_tier.toLowerCase()}`}>
+                    {caseData.detail.ddi.risk_tier.toUpperCase()}
                   </span>
                 </div>
                 <div className={styles.ddiMetaItem}>
                   <span className="text-xs text-muted">SLA Due</span>
-                  <span className="text-sm font-semibold">{caseData.slaDueAt ? "Within 2h" : "Normal"}</span>
+                  <span className="text-sm font-semibold">{caseData.detail.ddi.sla_due}</span>
                 </div>
                 <div className={styles.ddiMetaItem}>
                   <span className="text-xs text-muted">Confidence</span>
-                  <span className="text-sm font-semibold text-brand">94.8%</span>
+                  <span className="text-sm font-semibold text-brand">{caseData.detail.ddi.confidence_pct}%</span>
                 </div>
               </div>
             </div>
@@ -313,42 +351,45 @@ export default function CaseDetailPage() {
               <div className={styles.consensusItem}>
                 <div className={styles.consensusHeader}>
                   <span className="text-sm font-semibold">Clinical Llama-3 Triage</span>
-                  <span className="text-sm font-bold text-ink">{caseData.ddi + 2} DDI</span>
+                  <span className="text-sm font-bold text-ink">{caseData.detail.model_consensus.clinical_llama3_triage} DDI</span>
                 </div>
                 <div className="biomarker-bar-track">
-                  <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.ddi + 2, 100)}%` }} />
+                  <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.detail.model_consensus.clinical_llama3_triage, 100)}%` }} />
                 </div>
               </div>
 
               <div className={styles.consensusItem}>
                 <div className={styles.consensusHeader}>
                   <span className="text-sm font-semibold">Trauma-Informed Mistral</span>
-                  <span className="text-sm font-bold text-ink">{caseData.ddi - 1} DDI</span>
+                  <span className="text-sm font-bold text-ink">{caseData.detail.model_consensus.trauma_informed_mistral} DDI</span>
                 </div>
                 <div className="biomarker-bar-track">
-                  <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.ddi - 1, 100)}%` }} />
+                  <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.detail.model_consensus.trauma_informed_mistral, 100)}%` }} />
                 </div>
               </div>
 
-              <div className={styles.consensusItem}>
-                <div className={styles.consensusHeader}>
-                  <span className="text-sm font-semibold">Acoustic Biomarker Pipeline</span>
-                  <span className="text-sm font-bold text-ink">{caseData.ddi} DDI</span>
+              {/* Acoustic Biomarker Pipeline - hidden for SMS cases where null */}
+              {caseData.detail.model_consensus.acoustic_biomarker_pipeline !== null && (
+                <div className={styles.consensusItem}>
+                  <div className={styles.consensusHeader}>
+                    <span className="text-sm font-semibold">Acoustic Biomarker Pipeline</span>
+                    <span className="text-sm font-bold text-ink">{caseData.detail.model_consensus.acoustic_biomarker_pipeline} DDI</span>
+                  </div>
+                  <div className="biomarker-bar-track">
+                    <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.detail.model_consensus.acoustic_biomarker_pipeline, 100)}%` }} />
+                  </div>
                 </div>
-                <div className="biomarker-bar-track">
-                  <div className="biomarker-bar-fill" style={{ width: `${Math.min(caseData.ddi, 100)}%` }} />
-                </div>
-              </div>
+              )}
             </div>
             <div className={styles.consensusBadge}>
-              ✓ High Ensemble Agreement (95.2% Concordance)
+              ✓ {caseData.detail.model_consensus.agreement_label} ({caseData.detail.model_consensus.concordance_pct}% Concordance)
             </div>
           </div>
 
           {/* 30-day DDI trajectory */}
           <div className="card-elevated">
             <h2 className={`text-h2 ${styles.sectionTitle}`}>30-Day DDI Trajectory</h2>
-            <DDIChart data={caseData.trajectory} />
+            <DDIChart data={caseData.detail.ddi_trajectory_30d} />
           </div>
 
           {/* Quick clinical actions */}
@@ -363,7 +404,7 @@ export default function CaseDetailPage() {
               </Link>
               <button
                 className="btn btn-ghost btn-sm"
-                onClick={() => alert(`Escalation request queued for ${caseData.pseudoId}`)}
+                onClick={() => alert(`Escalation request queued for ${caseData.pseudo_id}`)}
                 style={{ flex: 1, justifyContent: "center" }}
               >
                 ⚡ Escalate Lead

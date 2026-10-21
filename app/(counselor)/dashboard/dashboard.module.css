@@ -31,6 +31,25 @@
   0%, 100% { opacity: 1; }
   50% { opacity: .3; }
 }
+/* ── Scope Selector Bar (National / State / District) ────────────────────── */
+.scopeBar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  flex-wrap: wrap;
+}
+
+.scopeSelect {
+  max-width: 180px;
+}
+
+.scopeIndicator {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  font-weight: 500;
+  margin-left: auto;
+}
 
 .statsRow {
   display: grid;

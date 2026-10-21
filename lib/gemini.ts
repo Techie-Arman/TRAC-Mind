@@ -4,11 +4,12 @@
 
 import {
   buildSystemInstruction,
-  detectCrisisIntent,
   BUDDY_VOICES,
   HELPLINES,
   BuddyChatMessage,
 } from "./buddy-personality";
+import { assessSafety, buildSafetyContextNote } from "./safety-engine";
+import { assessTextDistress, buildVoiceAssessmentNote } from "./voice-analysis";
 
 const GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta";
 
@@ -105,10 +106,14 @@ function formatContents(history: BuddyChatMessage[] = [], latestMessage: string)
  * Generate multi-turn text chat response using Gemini cascade
  */
 export async function generateBuddyChat(
-  payload: ChatRequestPayload
+  payload: ChatRequestPayload & { safetyContextNote?: string | null; voiceAssessmentNote?: string | null }
 ): Promise<ChatResponsePayload> {
-  const { message, history = [], language = "en", memoryContext } = payload;
-  const isCrisis = detectCrisisIntent(message);
+  const { message, history = [], language = "en", memoryContext, safetyContextNote, voiceAssessmentNote } = payload;
+
+  // Context-aware safety assessment (replaces single detectCrisisIntent call)
+  const safetyAssessment = assessSafety(message, history);
+  const isCrisis = safetyAssessment.isCrisis;
+  const safetyNote = safetyContextNote ?? buildSafetyContextNote(safetyAssessment);
 
   let apiKey: string;
   try {
@@ -118,7 +123,7 @@ export async function generateBuddyChat(
     return getOfflineFallback(message, isCrisis, language, "api_key_missing");
   }
 
-  const systemInstructionText = buildSystemInstruction(language, memoryContext);
+  const systemInstructionText = buildSystemInstruction(language, memoryContext, safetyNote, voiceAssessmentNote ?? null);
   const formattedContents = formatContents(history, message);
 
   // Attempt text models in cascade with low-latency timeout
@@ -143,7 +148,7 @@ export async function generateBuddyChat(
           contents: formattedContents,
           generationConfig: {
             temperature: 0.7,
-            maxOutputTokens: 200,
+            maxOutputTokens: 400,
             topP: 0.9,
           },
         }),
@@ -162,9 +167,11 @@ export async function generateBuddyChat(
       const candidateText = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
       if (candidateText) {
+        // Re-assess the reply itself in case the model generated concerning content
+        const replyAssessment = assessSafety(candidateText, []);
         return {
           reply: candidateText,
-          isCrisis: isCrisis || detectCrisisIntent(candidateText),
+          isCrisis: isCrisis || replyAssessment.isCrisis,
           modelUsed: model,
           suggestedHelpline: isCrisis ? HELPLINES.nhaa : undefined,
         };
@@ -235,13 +242,25 @@ async function fetchGoogleAudioFallback(text: string, language: string = "en"): 
 }
 
 /**
- * Generate voice response: text generation + native Gemini TTS audio
+ * Generate voice response: text generation + native Gemini TTS audio.
+ * Runs a text-based distress assessment on the transcript and injects an
+ * honest, clearly-labelled note into the system prompt.
+ * Does NOT claim acoustic or voice-based analysis — transcript text only.
  */
 export async function generateBuddyVoice(
   payload: ChatRequestPayload & { voiceName?: string }
 ): Promise<VoiceResponsePayload> {
-  const { language = "en", voiceName = BUDDY_VOICES.default } = payload;
-  const chatResponse = await generateBuddyChat(payload);
+  const { language = "en", voiceName = BUDDY_VOICES.default, history = [] } = payload;
+
+  // Text-based distress assessment from what was spoken (transcript only)
+  const distressAssessment = assessTextDistress(payload.message, history);
+  const voiceNote = buildVoiceAssessmentNote(distressAssessment);
+
+  // Generate the text reply with both safety and voice-assessment context
+  const chatResponse = await generateBuddyChat({
+    ...payload,
+    voiceAssessmentNote: voiceNote || null,
+  });
   const textToSynthesize = chatResponse.reply;
 
   let apiKey: string;
